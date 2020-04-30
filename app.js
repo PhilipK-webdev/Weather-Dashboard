@@ -33,6 +33,16 @@ $(document).ready(function () {
             $("#presentWeather").append(`<h3 class="tag">${temp}</h3>`);
         });
 
+        $("#appendRow").append(` <div class="row">
+        <div class="col-sm-12 col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <span class="forecast">blah blah  </span>
+                </div>
+            </div>
+        </div>
+    </div>`)
+
         $(document).on("click", ".tag", function () {
 
             $("#presentWeather").html("");
