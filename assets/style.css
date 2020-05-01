@@ -40,3 +40,13 @@ body{
     border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
 }
+.divWeather{
+
+    display: flex;
+    justify-content: start;
+    font-size: 15px;
+}
+/* #icon{
+
+    box-shadow: 42px -12px 32px -14px rgba(13,12,8,1);
+} */
