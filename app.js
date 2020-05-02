@@ -1,18 +1,9 @@
 $(document).ready(function () {
 
-    // var localDay = moment();
-    // var nextWeek = [];
-
-    // for (var i = 0; i < 5; i++) {
-
-    //     nextWeek.push(localDay.add(1, "day").format("MM/DD/YYYY"));
-    // }
-    // localDay = moment();
     var apiKey = "9896ef9948b9e627469b011deceaa07c";
     var inputUser = "";
     var lat;
     var lon;
-
     $("#btnSubmit").on("click", function (event) {
 
         event.preventDefault();
@@ -21,11 +12,17 @@ $(document).ready(function () {
         $("#textCityName").val("");
         $("#presentWeather").html("");
         $("#append").html("");
+        renderCity(inputUser, apiKey);
+
+
+    });
+
+    function renderCity(inputUser, key) {
 
         $.ajax({
 
             type: "GET",
-            url: `https://api.openweathermap.org/data/2.5/forecast?q=${inputUser}&units=imperial&appid=${apiKey}`,
+            url: `https://api.openweathermap.org/data/2.5/forecast?q=${inputUser}&units=imperial&appid=${key}`,
             dataType: "json"
 
         }).then(function (res) {
@@ -33,7 +30,6 @@ $(document).ready(function () {
             lat = res.city.coord.lat.toString();
             lon = res.city.coord.lon.toString();
             var arrWeather = [];
-            console.log(res.list);
             for (var i = 3; i < res.list.length; i += 8) {
 
 
@@ -49,7 +45,7 @@ $(document).ready(function () {
                 arrWeather.push(Weather);
             }
 
-            var t;
+
             $.ajax({
 
                 type: "GET",
@@ -58,8 +54,6 @@ $(document).ready(function () {
 
             }).then(function (res) {
 
-                console.log(res);
-                console.log(arrWeather);
 
                 var t = moment(arrWeather[0].time).format("MM/DD/YYYY");
                 $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + t}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
@@ -70,13 +64,7 @@ $(document).ready(function () {
 
                 for (var i = 1; i < arrWeather.length; i++) {
                     var t = moment(arrWeather[i].time).format("MM/DD/YYYY");
-                    // $("#append").append(` 
-                    //     <div class="append col">
-                    //                 <span class="forecast">${t}
-                    //                 <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/>
-                    //                 Humidity: ${arrWeather[i].humidity}
-                    //                 Temperature: ${arrWeather[i].tempeture}
-                    //             </span></div> `);
+
                     $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 18rem;">
                     <div class="card-header">${t}
                     <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
@@ -86,11 +74,18 @@ $(document).ready(function () {
                     </div>
                 </div>`)
                 }
-
             });
         });
+    }
 
+    $(document).on("click", ".list-group-item", function () {
+        var lastCity;
+        $("#presentWeather").html("");
+        $("#append").html("");
+        lastCity = $(this).text();
+        renderCity(lastCity, apiKey);
     });
+
 
 });
 
