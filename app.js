@@ -1,26 +1,26 @@
 $(document).ready(function () {
 
-    var localDay = moment();
-    var nextWeek = [];
-    var lat;
-    var lon;
-    for (var i = 0; i < 5; i++) {
+    // var localDay = moment();
+    // var nextWeek = [];
 
-        nextWeek.push(localDay.add(1, "day").format("MM/DD/YYYY"));
-    }
-    localDay = moment();
+    // for (var i = 0; i < 5; i++) {
+
+    //     nextWeek.push(localDay.add(1, "day").format("MM/DD/YYYY"));
+    // }
+    // localDay = moment();
     var apiKey = "9896ef9948b9e627469b011deceaa07c";
     var inputUser = "";
-
-
-
+    var lat;
+    var lon;
 
     $("#btnSubmit").on("click", function (event) {
 
         event.preventDefault();
         inputUser = $("#textCityName").val();
+        $(".list-group").append(` <li class="list-group-item">${inputUser}</li>`);
         $("#textCityName").val("");
-
+        $("#presentWeather").html("");
+        $("#append").html("");
 
         $.ajax({
 
@@ -33,12 +33,12 @@ $(document).ready(function () {
             lat = res.city.coord.lat.toString();
             lon = res.city.coord.lon.toString();
             var arrWeather = [];
-
+            console.log(res.list);
             for (var i = 3; i < res.list.length; i += 8) {
 
 
                 var Weather = {
-
+                    name: res.city.name,
                     tempeture: res.list[i].main.temp,
                     humidity: res.list[i].main.humidity,
                     windSpeed: res.list[i].wind.speed,
@@ -49,23 +49,7 @@ $(document).ready(function () {
                 arrWeather.push(Weather);
             }
 
-            var t = moment(Weather.time).format("MM/DD/YYYY");
-
-
-            $("#presentWeather").append(`<div class="text-primary divWeather">${res.city.name + " " + t}<div><img id="icon" src="http://openweathermap.org/img/wn/${Weather.icon}.png"/></div></div>`);
-            $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${Weather.tempeture}</div>`);
-            $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${Weather.humidity}</div>`);
-            $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${Weather.windSpeed}</div>`);
-            // console.log();
-            http://openweathermap.org/img/wn/10d@2x.png
-            console.log(res);
-            // latString = lat.toString();
-            // console.log(typeof latString);
-            // lonString = lon.toString();
-            // var nameCity = res.city.name + " " + `(${ localDay.format("MM/DD/YYYY") })`;
-            // var cloud = res.weather[0].description;
-            // var temp = res.main.temp;
-
+            var t;
             $.ajax({
 
                 type: "GET",
@@ -74,39 +58,30 @@ $(document).ready(function () {
 
             }).then(function (res) {
 
+                console.log(res);
+                console.log(arrWeather);
 
+                var t = moment(arrWeather[0].time).format("MM/DD/YYYY");
+                $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + t}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
+                $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
+                $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
+                $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
+                $("#presentWeather").append(`<div class="text-info divWeather">Uv: ${res.value}</div>`);
 
-
+                for (var i = 1; i < arrWeather.length; i++) {
+                    var t = moment(arrWeather[i].time).format("MM/DD/YYYY");
+                    $("#append").append(` 
+                        <div class="append col">
+                                    <span class="forecast">${t}
+                                    <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/>
+                                    Humidity: ${arrWeather[i].humidity}
+                                    Temperature: ${arrWeather[i].tempeture}
+                                </span></div> `)
+                }
 
             });
-
-            // $("#presentWeather").append(`<label class="lead tag"><i class="fas fa-cloud">${nameCity}</i></label>`);
-
-            // $("#presentWeather").append(`<h3 class="tag">${temp}</h3>`);
         });
 
     });
-
-
-
-    // });
-    //     $("#appendRow").append(` < div class= "row" >
-    //     <div class="col-sm-12 col-md-3">
-    //         <div class="card">
-    //             <div class="card-body">
-    //                 <span class="forecast">blah blah  </span>
-    //             </div>
-    //         </div>
-    //     </div>
-    // </>`)
-
-    // $(document).on("click", ".tag", function () {
-
-    //     $("#presentWeather").html("");
-
-    // });
-
-
-
 
 });
