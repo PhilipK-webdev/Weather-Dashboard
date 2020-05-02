@@ -17,7 +17,7 @@ $(document).ready(function () {
 
         event.preventDefault();
         inputUser = $("#textCityName").val();
-        $(".list-group").append(` <li class="list-group-item">${inputUser}</li>`);
+        $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
         $("#textCityName").val("");
         $("#presentWeather").html("");
         $("#append").html("");
@@ -25,7 +25,7 @@ $(document).ready(function () {
         $.ajax({
 
             type: "GET",
-            url: `https://api.openweathermap.org/data/2.5/forecast?q=${inputUser},us&units=imperial&appid=${apiKey}`,
+            url: `https://api.openweathermap.org/data/2.5/forecast?q=${inputUser}&units=imperial&appid=${apiKey}`,
             dataType: "json"
 
         }).then(function (res) {
@@ -70,13 +70,21 @@ $(document).ready(function () {
 
                 for (var i = 1; i < arrWeather.length; i++) {
                     var t = moment(arrWeather[i].time).format("MM/DD/YYYY");
-                    $("#append").append(` 
-                        <div class="append col">
-                                    <span class="forecast">${t}
-                                    <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/>
-                                    Humidity: ${arrWeather[i].humidity}
-                                    Temperature: ${arrWeather[i].tempeture}
-                                </span></div> `)
+                    // $("#append").append(` 
+                    //     <div class="append col">
+                    //                 <span class="forecast">${t}
+                    //                 <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/>
+                    //                 Humidity: ${arrWeather[i].humidity}
+                    //                 Temperature: ${arrWeather[i].tempeture}
+                    //             </span></div> `);
+                    $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 18rem;">
+                    <div class="card-header">${t}
+                    <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
+                    <div class="card-body">
+                        <h5 class="card-title">Humidity:${arrWeather[i].humidity}</h5>
+                        <p class="card-text">Temperature:${arrWeather[i].tempeture}</p>
+                    </div>
+                </div>`)
                 }
 
             });
@@ -85,3 +93,5 @@ $(document).ready(function () {
     });
 
 });
+
+
