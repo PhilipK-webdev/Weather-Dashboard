@@ -15,7 +15,7 @@
 
 <body>
     <div class="container">
-        <div class="jumbotron jumbotron-fluid bg-dark text-white">
+        <div class="jumbotron bg-dark text-white">
             <div class="container text-center">
                 <h1 class="display-4">Weather Dashboard</h1>
             </div>
@@ -29,6 +29,7 @@
                         <input type="text" class="form-control" aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-sm" placeholder="enter city name" id="textCityName">
                         <button class="btn btn-primary" type="submit" id="btnSubmit">Button</button>
+                        <button class="btn btn-danger" type="submit" id="deleteSubmit">Button</button>
                     </div>
                 </form>
                 <ul class="list-group">
@@ -44,7 +45,7 @@
                     <div class="card-body" id="presentWeather">
                     </div>
                 </div>
-                <div class="row row-cols-5 justify-content-between" id="append"></div>
+                <div class="row row-cols-4 justify-content-between" id="append"></div>
             </div>
         </div>
     </div>

@@ -4,18 +4,55 @@ $(document).ready(function () {
     var inputUser = "";
     var lat;
     var lon;
-    $("#btnSubmit").on("click", function (event) {
+    var arrWeather;
+    var flag;
+
+    setArray();
+
+
+
+
+
+
+    $("#deleteSubmit").on("click", function (event) {
 
         event.preventDefault();
-        inputUser = $("#textCityName").val();
-        $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
-        $("#textCityName").val("");
-        $("#presentWeather").html("");
-        $("#append").html("");
-        renderCity(inputUser, apiKey);
+        deleteLocal();
+
     });
 
-    function renderCity(inputUser, key) {
+    function deleteLocal() {
+
+        window.localStorage.removeItem("city");
+        $("#presentWeather").html("");
+        $("#append").html("");
+        $(".list-group").html("");
+    }
+
+    function renderLocalStorage() {
+
+        var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
+        $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
+        $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
+        $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
+        $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
+        $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[0].uv}</div>`);
+
+        for (var i = 1; i < 5; i++) {
+            var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
+
+            $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 10rem;">
+            <div class="card-header">${time}
+            <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
+            <div class="card-body">
+                <h5 class="card-title">Humidity:${arrWeather[i].humidity}</h5>
+                <p class="card-text">Temperature:${arrWeather[i].tempeture}</p>
+            </div>
+        </div>`)
+        }
+
+    }
+    function renderCity(inputUser, key, arrWeather) {
 
         $.ajax({
 
@@ -27,9 +64,8 @@ $(document).ready(function () {
 
             lat = res.city.coord.lat.toString();
             lon = res.city.coord.lon.toString();
-            var arrWeather = [];
+            arrWeather = [];
             for (var i = 3; i < res.list.length; i += 8) {
-
 
                 var Weather = {
                     name: res.city.name,
@@ -37,12 +73,12 @@ $(document).ready(function () {
                     humidity: res.list[i].main.humidity,
                     windSpeed: res.list[i].wind.speed,
                     time: res.list[i].dt_txt,
-                    icon: res.list[i].weather[0].icon
+                    icon: res.list[i].weather[0].icon,
+                    uv: 0
                 };
 
                 arrWeather.push(Weather);
             }
-
 
             $.ajax({
 
@@ -52,12 +88,14 @@ $(document).ready(function () {
 
             }).then(function (res) {
 
+                arrWeather[0].uv = res.value;
+
                 var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
                 $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
                 $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
                 $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
                 $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
-                $("#presentWeather").append(`<div class="text-info divWeather">UV: ${res.value}</div>`);
+                $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[0].uv}</div>`);
 
                 for (var i = 1; i < arrWeather.length; i++) {
                     var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
@@ -71,9 +109,13 @@ $(document).ready(function () {
                     </div>
                 </div>`)
                 }
+
             });
+
+            window.localStorage.setItem("city", JSON.stringify(arrWeather));
         });
     }
+
 
     $(document).on("click", ".list-group-item", function () {
         var lastCity;
@@ -84,6 +126,85 @@ $(document).ready(function () {
     });
 
 
+    function setArray() {
+
+        if (localStorage) {
+            arrWeather = JSON.parse(window.localStorage.getItem("city"));
+            if (arrWeather == null) {
+                arrWeather = [];
+                $("#btnSubmit").on("click", function (event) {
+
+                    event.preventDefault();
+                    inputUser = $("#textCityName").val();
+                    $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
+                    $("#textCityName").val("");
+                    $("#presentWeather").html("");
+                    $("#append").html("");
+                    renderCity(inputUser, apiKey, arrWeather);
+
+                });
+            } else {
+
+                renderLocalStorage();
+                $("#btnSubmit").on("click", function (event) {
+
+                    event.preventDefault();
+                    inputUser = $("#textCityName").val();
+                    $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
+                    $("#textCityName").val("");
+                    $("#presentWeather").html("");
+                    $("#append").html("");
+                    renderCity(inputUser, apiKey, arrWeather);
+
+                });
+            }
+
+        }
+    }
+
 });
 
 
+    // function renderWeather(inputUser) {
+
+    //     var arrCity = JSON.parse(window.localStorage.getItem(inputUser));
+    //     console.log(arrCity);
+    //     var time = moment(arrCity[0].time).format("MM/DD/YYYY");
+    //     $("#presentWeather").append(`<div class="text-primary divWeather">${arrCity[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrCity[0].icon}.png"/></div></div>`);
+    //     $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrCity[0].tempeture}</div>`);
+    //     $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrCity[0].humidity}</div>`);
+    //     $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrCity[0].windSpeed}</div>`);
+    //     $("#presentWeather").append(`<div class="text-info divWeather">UV: ${res.value}</div>`);
+
+    //     for (var i = 1; i < arrCity.length; i++) {
+    //         var time = moment(arrCity[i].time).format("MM/DD/YYYY");
+
+    //         $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 10rem;">
+    //         <div class="card-header">${time}
+    //         <img id="icon" src="http://openweathermap.org/img/wn/${arrCity[i].icon}.png"/></div>
+    //         <div class="card-body">
+    //             <h5 class="card-title">Humidity:${arrCity[i].humidity}</h5>
+    //             <p class="card-text">Temperature:${arrCity[i].tempeture}</p>
+    //         </div>
+    //     </div>`)
+    //     }
+
+        // setArray();
+        // function setArray() {
+        //     arrayHistoryGame = JSON.parse(localStorage.getItem("inpuUser")); //get data from storage
+        //     console.log(arrayHistoryGame);
+        //     if (arrayHistoryGame == null) {
+        //         arrayHistoryGame = []; //if data exist
+        //         console.log(arrayHistoryGame);
+        //     }
+        // }
+
+
+
+// {/* <div class="card text-center">
+//     <div class="card-body">
+//         <h5 class="card-title">Card title</h5>
+//         <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
+//         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+//     </div>
+// </div> */}
