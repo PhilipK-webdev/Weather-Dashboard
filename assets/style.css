@@ -1,5 +1,6 @@
 body{
-    font-family: monospace;
+    
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .jumbotron{
@@ -16,10 +17,10 @@ body{
 }
 .card-body{
 
-    height: 250px;
-    width:500px
-    
+    padding-top: 10px;
+    padding-left: 10px
 }
+
 .card{
 
     margin-top: 10px;
@@ -40,12 +41,6 @@ body{
     border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
 }
-.divWeather{
-
-    display: flex;
-    justify-content: start;
-    font-size: 15px;
-}
 .append{
     padding-bottom: 10px;
     margin-top: 10px;
@@ -58,11 +53,33 @@ body{
     margin-left: 15px;
     margin-right: 10px;
 }
-.forecast{
-
-    
+.red{
+    width: 80px;
+    color: white;
+    background-color: rgba(134, 48, 48, 0.993);
 }
 
+.blue{
+
+    width: 80px;
+    color: white;
+    background-color: blue;
+}
+
+.display-5{
+
+    margin-top: 10px;
+}
+.display-4{
+
+    font-size: 45px !important;
+}
+
+.box{
+
+    widows: 200px;
+    height:200px;
+}
 /* #icon{
 
     box-shadow: 42px -12px 32px -14px rgba(13,12,8,1);

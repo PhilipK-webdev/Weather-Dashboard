@@ -2,8 +2,8 @@ $(document).ready(function () {
 
     var apiKey = "9896ef9948b9e627469b011deceaa07c";
     var inputUser = "";
-    var lat;
-    var lon;
+    var latitude;
+    var longitude;
     var arrWeather;
     var uv;
 
@@ -13,8 +13,13 @@ $(document).ready(function () {
 
         $("#btnSubmit").on("click", function (event) {
             event.preventDefault();
+            $(".display-5").show();
             inputUser = $("#textCityName").val();
-            $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
+            console.log(inputUser);
+            inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
+            $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
+
+
             $("#textCityName").val("");
             $("#presentWeather").html("");
             $("#append").html("");
@@ -24,10 +29,13 @@ $(document).ready(function () {
 
     }
 
+
+
     $(document).on("click", ".list-group-item", function () {
         var lastCity;
         $("#presentWeather").html("");
         $("#append").html("");
+
         lastCity = $(this).text();
         renderCity(lastCity, apiKey);
     });
@@ -45,28 +53,37 @@ $(document).ready(function () {
         $("#presentWeather").html("");
         $("#append").html("");
         $(".list-group").html("");
+        $(".display-5").hide();
     }
 
 
     function renderLocalStorage() {
 
         var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
-        console.log(arrWeather[5]);
-        $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
-        $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
-        $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
-        $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
-        $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[5]}</div>`);
+        $("#presentWeather").append(`<div class="text-primary">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
+        $("#presentWeather").append(`<div class="text-info">Temperature: ${arrWeather[0].tempeture} F</div>`);
+        $("#presentWeather").append(`<div class="text-info">Humidity: ${arrWeather[0].humidity} %</div>`);
+        $("#presentWeather").append(`<div class="text-info">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
+        $("#presentWeather").append(`<div class="text-info"><p id="uv">UV: ${arrWeather[5]}</p></div>`);
+
+
+        if (arrWeather[5] > 7) {
+
+            $("#uv").addClass("red");
+        } else {
+
+            $("#uv").addClass("blue");
+        }
 
         for (var i = 1; i < 5; i++) {
             var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
 
-            $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 10rem;">
+            $("#append").append(`<div class="card text-white bg-primary mb-2 mr-2 ml-2" style="max-width: 10rem;">
             <div class="card-header">${time}
             <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
             <div class="card-body">
-                <h5 class="card-title">Humidity:${arrWeather[i].humidity}</h5>
-                <p class="card-text">Temperature:${arrWeather[i].tempeture}</p>
+                <p class="card-title">Humidity: ${arrWeather[i].humidity} %</p>
+                <p class="card-text">Temperature: <br>${arrWeather[i].tempeture} F</p>
             </div>
         </div>`)
         }
@@ -82,8 +99,8 @@ $(document).ready(function () {
 
         }).then(function (res) {
 
-            lat = res.city.coord.lat.toString();
-            lon = res.city.coord.lon.toString();
+            latitude = res.city.coord.lat.toString();
+            longitude = res.city.coord.lon.toString();
             arrWeather = [];
             for (var i = 3; i < res.list.length; i += 8) {
 
@@ -102,29 +119,39 @@ $(document).ready(function () {
             $.ajax({
 
                 type: "GET",
-                url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`,
+                url: `https://api.openweathermap.org/data/2.5/uvi?lat=${latitude}&lon=${longitude}&appid=${apiKey}`,
                 dataTypa: "json"
 
             }).then(function (res) {
-                console.log("h1");
+
+
+
+
                 arrWeather.push(res.value);
                 var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
-                $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
-                $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
-                $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
-                $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
-                $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[5]}</div>`);
+                $("#presentWeather").append(`<div class="text-primary">${arrWeather[0].name + " " + time}<div><img src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
+                $("#presentWeather").append(`<div class="text-info">Temperature: ${arrWeather[0].tempeture} F</div>`);
+                $("#presentWeather").append(`<div class="text-info">Humidity: ${arrWeather[0].humidity} %</div>`);
+                $("#presentWeather").append(`<div class="text-info">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
+                $("#presentWeather").append(`<div class="text-info"><p id="uv">UV: ${arrWeather[5]}</p></div>`);
 
+                if (res.value > 7) {
+
+                    $("#uv").addClass("red");
+                } else {
+
+                    $("#uv").addClass("blue");
+                }
 
                 for (var i = 1; i < arrWeather.length - 1; i++) {
                     var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
 
-                    $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 10rem;">
+                    $("#append").append(`<div class="card text-white bg-primary mb-2 mr-2 ml-2" style="max-width: 10rem;">
                     <div class="card-header">${time}
                     <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
                     <div class="card-body">
-                        <h5 class="card-title">Humidity:${arrWeather[i].humidity}</h5>
-                        <p class="card-text">Temperature:${arrWeather[i].tempeture}</p>
+                        <p class="card-title">Humidity:${arrWeather[i].humidity} %</p>
+                        <p class="card-text">Temperature: <br>${arrWeather[i].tempeture} F</p>
                     </div>
                 </div>`)
                 }
