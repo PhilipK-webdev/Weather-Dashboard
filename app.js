@@ -5,14 +5,32 @@ $(document).ready(function () {
     var lat;
     var lon;
     var arrWeather;
-    var flag;
+    var uv;
 
     setArray();
 
+    function btnSubmit() {
 
+        $("#btnSubmit").on("click", function (event) {
+            event.preventDefault();
+            inputUser = $("#textCityName").val();
+            $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
+            $("#textCityName").val("");
+            $("#presentWeather").html("");
+            $("#append").html("");
+            renderCity(inputUser, apiKey, arrWeather);
 
+        });
 
+    }
 
+    $(document).on("click", ".list-group-item", function () {
+        var lastCity;
+        $("#presentWeather").html("");
+        $("#append").html("");
+        lastCity = $(this).text();
+        renderCity(lastCity, apiKey);
+    });
 
     $("#deleteSubmit").on("click", function (event) {
 
@@ -29,14 +47,16 @@ $(document).ready(function () {
         $(".list-group").html("");
     }
 
+
     function renderLocalStorage() {
 
         var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
+        console.log(arrWeather[5]);
         $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
         $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
         $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
         $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
-        $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[0].uv}</div>`);
+        $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[5]}</div>`);
 
         for (var i = 1; i < 5; i++) {
             var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
@@ -73,8 +93,7 @@ $(document).ready(function () {
                     humidity: res.list[i].main.humidity,
                     windSpeed: res.list[i].wind.speed,
                     time: res.list[i].dt_txt,
-                    icon: res.list[i].weather[0].icon,
-                    uv: 0
+                    icon: res.list[i].weather[0].icon
                 };
 
                 arrWeather.push(Weather);
@@ -87,17 +106,17 @@ $(document).ready(function () {
                 dataTypa: "json"
 
             }).then(function (res) {
-
-                arrWeather[0].uv = res.value;
-
+                console.log("h1");
+                arrWeather.push(res.value);
                 var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
                 $("#presentWeather").append(`<div class="text-primary divWeather">${arrWeather[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
                 $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrWeather[0].tempeture}</div>`);
                 $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrWeather[0].humidity}</div>`);
                 $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrWeather[0].windSpeed}</div>`);
-                $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[0].uv}</div>`);
+                $("#presentWeather").append(`<div class="text-info divWeather">UV: ${arrWeather[5]}</div>`);
 
-                for (var i = 1; i < arrWeather.length; i++) {
+
+                for (var i = 1; i < arrWeather.length - 1; i++) {
                     var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
 
                     $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 10rem;">
@@ -109,22 +128,12 @@ $(document).ready(function () {
                     </div>
                 </div>`)
                 }
-
+                window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
 
-            window.localStorage.setItem("city", JSON.stringify(arrWeather));
+
         });
     }
-
-
-    $(document).on("click", ".list-group-item", function () {
-        var lastCity;
-        $("#presentWeather").html("");
-        $("#append").html("");
-        lastCity = $(this).text();
-        renderCity(lastCity, apiKey);
-    });
-
 
     function setArray() {
 
@@ -132,79 +141,13 @@ $(document).ready(function () {
             arrWeather = JSON.parse(window.localStorage.getItem("city"));
             if (arrWeather == null) {
                 arrWeather = [];
-                $("#btnSubmit").on("click", function (event) {
-
-                    event.preventDefault();
-                    inputUser = $("#textCityName").val();
-                    $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
-                    $("#textCityName").val("");
-                    $("#presentWeather").html("");
-                    $("#append").html("");
-                    renderCity(inputUser, apiKey, arrWeather);
-
-                });
+                btnSubmit();
             } else {
 
                 renderLocalStorage();
-                $("#btnSubmit").on("click", function (event) {
-
-                    event.preventDefault();
-                    inputUser = $("#textCityName").val();
-                    $(".list-group").prepend(` <li class="list-group-item">${inputUser}</li>`);
-                    $("#textCityName").val("");
-                    $("#presentWeather").html("");
-                    $("#append").html("");
-                    renderCity(inputUser, apiKey, arrWeather);
-
-                });
+                btnSubmit();
             }
 
         }
     }
-
 });
-
-
-    // function renderWeather(inputUser) {
-
-    //     var arrCity = JSON.parse(window.localStorage.getItem(inputUser));
-    //     console.log(arrCity);
-    //     var time = moment(arrCity[0].time).format("MM/DD/YYYY");
-    //     $("#presentWeather").append(`<div class="text-primary divWeather">${arrCity[0].name + " " + time}<div><img id="icon" src="http://openweathermap.org/img/wn/${arrCity[0].icon}.png"/></div></div>`);
-    //     $("#presentWeather").append(`<div class="text-info divWeather">Temperature: ${arrCity[0].tempeture}</div>`);
-    //     $("#presentWeather").append(`<div class="text-info divWeather">Humidity: ${arrCity[0].humidity}</div>`);
-    //     $("#presentWeather").append(`<div class="text-info divWeather">Wind Speed: ${arrCity[0].windSpeed}</div>`);
-    //     $("#presentWeather").append(`<div class="text-info divWeather">UV: ${res.value}</div>`);
-
-    //     for (var i = 1; i < arrCity.length; i++) {
-    //         var time = moment(arrCity[i].time).format("MM/DD/YYYY");
-
-    //         $("#append").append(`<div class="card text-white bg-primary mb-2" id="append" style="max-width: 10rem;">
-    //         <div class="card-header">${time}
-    //         <img id="icon" src="http://openweathermap.org/img/wn/${arrCity[i].icon}.png"/></div>
-    //         <div class="card-body">
-    //             <h5 class="card-title">Humidity:${arrCity[i].humidity}</h5>
-    //             <p class="card-text">Temperature:${arrCity[i].tempeture}</p>
-    //         </div>
-    //     </div>`)
-    //     }
-
-        // setArray();
-        // function setArray() {
-        //     arrayHistoryGame = JSON.parse(localStorage.getItem("inpuUser")); //get data from storage
-        //     console.log(arrayHistoryGame);
-        //     if (arrayHistoryGame == null) {
-        //         arrayHistoryGame = []; //if data exist
-        //         console.log(arrayHistoryGame);
-        //     }
-        // }
-
-
-
-// {/* <div class="card text-center">
-//     <div class="card-body">
-//         <h5 class="card-title">Card title</h5>
-//         <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
-//         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-//     </div>
-// </div> */}
