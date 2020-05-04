@@ -33,6 +33,8 @@ body{
 .btn{
 
     height:calc(1.5em + .5rem + 2px);
+    margin-right:2.5px;
+    margin-left: 5px;
 }
 .form-control{
 

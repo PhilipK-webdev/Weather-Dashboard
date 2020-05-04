@@ -17,81 +17,83 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="jumbotron bg-dark text-white">
-            <div class="container text-center">
-                <h1 class="display-4">Weather Dashboard</h1>
+    <main>
+        <div class="container">
+            <div class="jumbotron bg-dark text-white">
+                <div class="container text-center">
+                    <h1 class="display-4">Weather Dashboard</h1>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12 col-md-5 col-lg-5">
-                <h4 class="mb-4">Search for a City :</h4>
-                <form>
-
-                    <div class="input-group input-group-sm mb-3">
-
-                        <input type="text" class="form-control" aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-sm" placeholder="enter city name" id="textCityName">
-                        </input>
-                        <button class="btn btn-primary" type="submit" id="btnSubmit"><i
-                                class="fas fa-search"></i></button>
-                        <button class="btn btn-danger" type="submit" id="deleteSubmit">Reset</button>
+            <div class="row">
+                <div class="col-sm-12 col-md-5 col-lg-5">
+                    <h4 class="mb-4">Search for a City :</h4>
+                    <form>
+                        <div class="input-group input-group-sm mb-3">
+                            <input type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-sm" placeholder="enter city name" id="textCityName">
+                            </input>
+                            <button class="btn btn-primary" type="submit" id="btnSubmit"><i
+                                    class="fas fa-search"></i></button>
+                            <button class="btn btn-danger" type="submit" id="deleteSubmit">Reset</button>
+                        </div>
+                    </form>
+                    <div>
+                        <ul class="list-group"></ul>
                     </div>
-                </form>
-                <ul class="list-group"></ul>
-                <!-- ------------------------------------------------------------------- -->
+
+                    <!-- ------------------------------------------------------------------- -->
 
 
-                <div class="modal fade" id="myModal" role="dialog">
-                    <div class="modal-dialog">
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Modal Header</h4>
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Input Valodation</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Wrong input , try again</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <p>Wrong input , try again</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="myModalCity" role="dialog">
+                        <div class="modal-dialog modal-sm">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Search twice for the same city</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p> Wrong input - You already search for this city.To look again on the weather of
+                                        your search press on the name of the city.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="myModalCity" role="dialog">
-                    <div class="modal-dialog modal-sm">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Modal Header</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p> Wrong input - You already search for this city.To look again on the weather of
-                                    your search press on the name of the city.</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
+                <div class="col-sm-12 col-md-7 col-lg-7">
+                    <div class="card">
+                        <div class="card-body box" id="presentWeather">
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-7 col-lg-7">
-                <div class="card">
-                    <div class="card-body box" id="presentWeather">
-                    </div>
 
-                </div>
-                <h4 class="display-5">5-Days Forecast : </h4>
-                <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 justify-content-between"
-                    id="append">
+                    </div>
+                    <h4 class="display-5">5-Days Forecast : </h4>
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 justify-content-between"
+                        id="append">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </main>
 
 
 

@@ -18,7 +18,7 @@ $(document).ready(function () {
             $("#textCityName").val("");
             $("#presentWeather").html("");
             $("#append").html("");
-            renderCity(inputUser, apiKey, arrWeather);
+
 
         });
 
@@ -43,11 +43,14 @@ $(document).ready(function () {
                 inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
                 $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
                 $(".display-5").show();
+                renderCity(inputUser, apiKey, arrWeather);
             }
 
         } else {
-            console.log(arrValueInput);
+
+
             $("#myModalCity").modal();
+
         }
 
 
@@ -72,7 +75,7 @@ $(document).ready(function () {
     function deleteLocal() {
 
         window.localStorage.removeItem("city");
-        window.location.reload();
+        arrValueInput = [];
         $("#presentWeather").html("");
         $("#append").html("");
         $(".list-group").html("");
@@ -87,7 +90,6 @@ $(document).ready(function () {
         $("#presentWeather").append(`<div class="text-info">Humidity: ${arrWeather[0].humidity} %</div>`);
         $("#presentWeather").append(`<div class="text-info">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
         $("#presentWeather").append(`<div class="text-info"><p id="uv">UV: ${arrWeather[6]}</p></div>`);
-
 
         var color = arrWeather[6] > 7 ? "red" : "blue";
 
@@ -110,6 +112,7 @@ $(document).ready(function () {
     }
 
     function renderLocalStorage() {
+        $(".display-5").show();
         display(arrWeather);
     }
 
@@ -123,7 +126,7 @@ $(document).ready(function () {
 
         }).then(function (res) {
 
-            console.log(res);
+
 
             latitude = res.city.coord.lat.toString();
             longitude = res.city.coord.lon.toString();
@@ -139,7 +142,7 @@ $(document).ready(function () {
             };
 
             arrWeather.push(Weather);
-            console.log(arrWeather);
+
             for (var i = 3; i < res.list.length; i += 8) {
 
                 Weather = {
@@ -167,8 +170,6 @@ $(document).ready(function () {
                 window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
         });
-
-
 
     }
 
