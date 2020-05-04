@@ -6,7 +6,7 @@ $(document).ready(function () {
     var longitude;
     var arrWeather;
     var arrValueInput = [];
-
+    $(".display-5").hide();
     setArray();
 
     function btnSubmit() {
@@ -14,8 +14,6 @@ $(document).ready(function () {
         $("#btnSubmit").on("click", function (event) {
             event.preventDefault();
             inputUser = $("#textCityName").val();
-
-
             isValidInput(inputUser, arrValueInput);
             $("#textCityName").val("");
             $("#presentWeather").html("");
@@ -36,7 +34,7 @@ $(document).ready(function () {
 
             if (inputUser === "" || hasNumber.test(inputUser) || !pattern.test(inputUser)) {
 
-                alert("Wrong input");
+                $("#myModal").modal();
                 $(".display-5").hide();
 
             } else {
@@ -48,8 +46,8 @@ $(document).ready(function () {
             }
 
         } else {
-
-            alert("Wrong input - You already search for this city" + "\nTo look again on the weather of your search press on the name of the city.");
+            console.log(arrValueInput);
+            $("#myModalCity").modal();
         }
 
 
@@ -74,6 +72,7 @@ $(document).ready(function () {
     function deleteLocal() {
 
         window.localStorage.removeItem("city");
+        window.location.reload();
         $("#presentWeather").html("");
         $("#append").html("");
         $(".list-group").html("");
