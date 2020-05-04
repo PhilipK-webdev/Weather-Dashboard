@@ -126,12 +126,9 @@ $(document).ready(function () {
 
         }).then(function (res) {
 
-
-
             latitude = res.city.coord.lat.toString();
             longitude = res.city.coord.lon.toString();
             arrWeather = [];
-
             var Weather = {
                 name: res.city.name,
                 tempeture: res.list[0].main.temp,
@@ -140,7 +137,6 @@ $(document).ready(function () {
                 time: res.list[0].dt_txt,
                 icon: res.list[0].weather[0].icon
             };
-
             arrWeather.push(Weather);
 
             for (var i = 3; i < res.list.length; i += 8) {
@@ -153,9 +149,9 @@ $(document).ready(function () {
                     time: res.list[i].dt_txt,
                     icon: res.list[i].weather[0].icon
                 };
-
                 arrWeather.push(Weather);
             }
+
 
             $.ajax({
 
@@ -170,7 +166,6 @@ $(document).ready(function () {
                 window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
         });
-
     }
 
     function setArray() {
@@ -181,11 +176,9 @@ $(document).ready(function () {
                 arrWeather = [];
                 btnSubmit();
             } else {
-
                 renderLocalStorage();
                 btnSubmit();
             }
-
         }
     }
 });
