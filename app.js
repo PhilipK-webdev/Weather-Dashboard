@@ -72,8 +72,6 @@ $(document).ready(function () {
             } else {
 
                 arrValueInput.push(inputUser.toLocaleLowerCase());
-                inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
-
                 $(".display-5").show();
                 renderCity(inputUser, apiKey, arrWeather);
             }
@@ -98,6 +96,7 @@ $(document).ready(function () {
 
         }).then(function (res) {
 
+            inputUser = res.city.name;
             $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
             latitude = res.city.coord.lat.toString();
             longitude = res.city.coord.lon.toString();
