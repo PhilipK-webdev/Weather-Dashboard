@@ -73,7 +73,7 @@ $(document).ready(function () {
 
                 arrValueInput.push(inputUser.toLocaleLowerCase());
                 inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
-                $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
+
                 $(".display-5").show();
                 renderCity(inputUser, apiKey, arrWeather);
             }
@@ -89,7 +89,7 @@ $(document).ready(function () {
     // 2 ajaxs call to get the data.
     // GET information from openwathermap is only with name of the city(not zipcode or any numbers inside the URl)
     function renderCity(inputUser, key, arrWeather) {
-        $("#alert").hide();
+
         $.ajax({
 
             type: "GET",
@@ -98,6 +98,7 @@ $(document).ready(function () {
 
         }).then(function (res) {
 
+            $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
             latitude = res.city.coord.lat.toString();
             longitude = res.city.coord.lon.toString();
             arrWeather = [];
@@ -136,6 +137,7 @@ $(document).ready(function () {
                 displayCity(arrWeather);
                 window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
+
         });
     }
 
