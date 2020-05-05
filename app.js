@@ -19,7 +19,6 @@ $(document).ready(function () {
             $("#presentWeather").html("");
             $("#append").html("");
 
-
         });
 
     }
@@ -60,7 +59,6 @@ $(document).ready(function () {
         var lastCity;
         $("#presentWeather").html("");
         $("#append").html("");
-
         lastCity = $(this).text();
         renderCity(lastCity, apiKey);
     });
