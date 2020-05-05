@@ -70,7 +70,6 @@ $(document).ready(function () {
                 $(".display-5").hide();
 
             } else {
-
                 arrValueInput.push(inputUser.toLocaleLowerCase());
                 $(".display-5").show();
                 renderCity(inputUser, apiKey, arrWeather);
@@ -81,9 +80,7 @@ $(document).ready(function () {
             $("#myModalCity").modal();
 
         }
-
     }
-
     // 2 ajaxs call to get the data.
     // GET information from openwathermap is only with name of the city(not zipcode or any numbers inside the URl)
     function renderCity(inputUser, key, arrWeather) {
@@ -112,7 +109,6 @@ $(document).ready(function () {
             arrWeather.push(Weather);
 
             for (var i = 3; i < res.list.length; i += 8) {
-
                 Weather = {
                     name: res.city.name,
                     tempeture: res.list[i].main.temp,
@@ -123,7 +119,6 @@ $(document).ready(function () {
                 };
                 arrWeather.push(Weather);
             }
-
             $.ajax({
 
                 type: "GET",
@@ -137,6 +132,10 @@ $(document).ready(function () {
                 window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
 
+        }).catch(function (res) {
+            console.log(res);
+            $("#presentWeather").text(res.responseJSON.message + " " + res.responseJSON.cod);
+            $(".display-5").html("");
         });
     }
 
@@ -170,11 +169,8 @@ $(document).ready(function () {
         var color = arrWeather[6] > 7 ? "red" : "blue";
 
         $("#uv").addClass(color);
-
-
         for (var i = 1; i < arrWeather.length - 1; i++) {
             var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
-
             $("#append").append(`<div class="card text-white bg-primary mb-2 mr-2 ml-2" style="max-width: 10rem;">
             <div class="card-header">${time}
             <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
@@ -184,7 +180,5 @@ $(document).ready(function () {
             </div>
         </div>`)
         }
-
     }
-
 });
