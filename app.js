@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    // Declaration
     var apiKey = "9896ef9948b9e627469b011deceaa07c";
     var inputUser = "";
     var latitude;
@@ -7,7 +7,9 @@ $(document).ready(function () {
     var arrWeather;
     var arrValueInput = [];
     $(".display-5").hide();
-    setArray();
+
+    // Setting the array for local storage and init the app.
+    setArrayWeatherLocalStorage();
 
     function btnSubmit() {
 
@@ -20,14 +22,45 @@ $(document).ready(function () {
             $("#append").html("");
 
         });
-
     }
 
+    // makes every li click on - display info regarding the city with the name of the li.
+    $(document).on("click", ".list-group-item", function () {
+        var lastCity;
+        $("#presentWeather").html("");
+        $("#append").html("");
+        lastCity = $(this).text();
+        renderCity(lastCity, apiKey);
+    });
+
+    // reset the local storage 
+    $("#deleteSubmit").on("click", function (event) {
+
+        event.preventDefault();
+        deleteLocal();
+
+    });
+
+    // check for local storage and setting the arrWeather.
+    function setArrayWeatherLocalStorage() {
+
+        if (localStorage) {
+            arrWeather = JSON.parse(window.localStorage.getItem("city"));
+            if (arrWeather == null) {
+                arrWeather = [];
+                btnSubmit();
+            } else {
+                renderLocalStorage();
+                btnSubmit();
+            }
+        }
+    }
+
+    // Input Validation from the User.
     function isValidInput(inputUser, arrValueInput) {
 
         var pattern = new RegExp(/^[a-zA-Z0-9- ]*$/);
         var hasNumber = /\d/;
-
 
         if (!arrValueInput.includes(inputUser)) {
 
@@ -47,73 +80,14 @@ $(document).ready(function () {
 
         } else {
 
-
             $("#myModalCity").modal();
 
         }
 
-
     }
 
-    $(document).on("click", ".list-group-item", function () {
-        var lastCity;
-        $("#presentWeather").html("");
-        $("#append").html("");
-        lastCity = $(this).text();
-        renderCity(lastCity, apiKey);
-    });
-
-    $("#deleteSubmit").on("click", function (event) {
-
-        event.preventDefault();
-        deleteLocal();
-
-    });
-
-    function deleteLocal() {
-
-        window.localStorage.removeItem("city");
-        arrValueInput = [];
-        $("#presentWeather").html("");
-        $("#append").html("");
-        $(".list-group").html("");
-        $(".display-5").hide();
-    }
-
-    function display(arrWeather) {
-
-        var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
-        $("#presentWeather").append(`<div class="text-primary font-weight-bold">${arrWeather[0].name + " " + time}<div><img src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
-        $("#presentWeather").append(`<div class="text-info font-weight-bold">Temperature: ${arrWeather[0].tempeture} F</div>`);
-        $("#presentWeather").append(`<div class="text-info font-weight-bold">Humidity: ${arrWeather[0].humidity} %</div>`);
-        $("#presentWeather").append(`<div class="text-info font-weight-bold">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
-        $("#presentWeather").append(`<div class="text-info font-weight-bold"><p id="uv">UV: ${arrWeather[6]}</p></div>`);
-
-        var color = arrWeather[6] > 7 ? "red" : "blue";
-
-        $("#uv").addClass(color);
-
-
-        for (var i = 1; i < arrWeather.length - 1; i++) {
-            var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
-
-            $("#append").append(`<div class="card text-white bg-primary mb-2 mr-2 ml-2" style="max-width: 10rem;">
-            <div class="card-header">${time}
-            <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
-            <div class="card-body">
-                <p class="card-title">Humidity: ${arrWeather[i].humidity} %</p>
-                <p class="card-text">Temperature: <br> ${arrWeather[i].tempeture} F</p>
-            </div>
-        </div>`)
-        }
-
-    }
-
-    function renderLocalStorage() {
-        $(".display-5").show();
-        display(arrWeather);
-    }
-
+    // 2 ajaxs call to get the data.
+    // GET information from openwathermap is only with name of the city(not zipcode or any numbers inside the URl)
     function renderCity(inputUser, key, arrWeather) {
         $("#alert").hide();
         $.ajax({
@@ -150,7 +124,6 @@ $(document).ready(function () {
                 arrWeather.push(Weather);
             }
 
-
             $.ajax({
 
                 type: "GET",
@@ -160,23 +133,57 @@ $(document).ready(function () {
             }).then(function (res) {
 
                 arrWeather.push(res.value);
-                display(arrWeather);
+                displayCity(arrWeather);
                 window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
         });
     }
 
-    function setArray() {
-
-        if (localStorage) {
-            arrWeather = JSON.parse(window.localStorage.getItem("city"));
-            if (arrWeather == null) {
-                arrWeather = [];
-                btnSubmit();
-            } else {
-                renderLocalStorage();
-                btnSubmit();
-            }
-        }
+    // shows the last city on the app
+    function renderLocalStorage() {
+        $(".display-5").show();
+        displayCity(arrWeather);
     }
+
+    // reset all the data - clean the local storage.
+    function deleteLocal() {
+
+        window.localStorage.removeItem("city");
+        arrValueInput = [];
+        $("#presentWeather").html("");
+        $("#append").html("");
+        $(".list-group").html("");
+        $(".display-5").hide();
+    }
+
+    // display the data on the screen.
+    function displayCity(arrWeather) {
+
+        var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
+        $("#presentWeather").append(`<div class="text-primary font-weight-bold">${arrWeather[0].name + " " + time}<div><img src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold">Temperature: ${arrWeather[0].tempeture} F</div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold">Humidity: ${arrWeather[0].humidity} %</div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold"><p id="uv">UV: ${arrWeather[6]}</p></div>`);
+
+        var color = arrWeather[6] > 7 ? "red" : "blue";
+
+        $("#uv").addClass(color);
+
+
+        for (var i = 1; i < arrWeather.length - 1; i++) {
+            var time = moment(arrWeather[i].time).format("MM/DD/YYYY");
+
+            $("#append").append(`<div class="card text-white bg-primary mb-2 mr-2 ml-2" style="max-width: 10rem;">
+            <div class="card-header">${time}
+            <img id="icon" src="http://openweathermap.org/img/wn/${arrWeather[i].icon}.png"/></div>
+            <div class="card-body">
+                <p class="card-title">Humidity: ${arrWeather[i].humidity} %</p>
+                <p class="card-text">Temperature: <br> ${arrWeather[i].tempeture} F</p>
+            </div>
+        </div>`)
+        }
+
+    }
+
 });
