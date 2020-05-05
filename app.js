@@ -85,11 +85,11 @@ $(document).ready(function () {
     function display(arrWeather) {
 
         var time = moment(arrWeather[0].time).format("MM/DD/YYYY");
-        $("#presentWeather").append(`<div class="text-primary">${arrWeather[0].name + " " + time}<div><img src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
-        $("#presentWeather").append(`<div class="text-info">Temperature: ${arrWeather[0].tempeture} F</div>`);
-        $("#presentWeather").append(`<div class="text-info">Humidity: ${arrWeather[0].humidity} %</div>`);
-        $("#presentWeather").append(`<div class="text-info">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
-        $("#presentWeather").append(`<div class="text-info"><p id="uv">UV: ${arrWeather[6]}</p></div>`);
+        $("#presentWeather").append(`<div class="text-primary font-weight-bold">${arrWeather[0].name + " " + time}<div><img src="http://openweathermap.org/img/wn/${arrWeather[0].icon}.png"/></div></div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold">Temperature: ${arrWeather[0].tempeture} F</div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold">Humidity: ${arrWeather[0].humidity} %</div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold">Wind Speed: ${arrWeather[0].windSpeed} MPH</div>`);
+        $("#presentWeather").append(`<div class="text-info font-weight-bold"><p id="uv">UV: ${arrWeather[6]}</p></div>`);
 
         var color = arrWeather[6] > 7 ? "red" : "blue";
 

@@ -20,22 +20,22 @@
 
     <main>
         <div class="container">
-            <div class="jumbotron bg-dark text-white">
+            <div class="jumbotron bg-dark text-white mt-2">
                 <div class="container text-center">
                     <h1 class="display-4">Weather Dashboard</h1>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-5 col-lg-5">
-                    <h4 class="mb-4">Search for a City :</h4>
+                    <h4 class="mb-4 text-primary">Search for a City :</h4>
                     <form>
                         <div class="input-group input-group-sm mb-3">
                             <input type="text" class="form-control" aria-label="Sizing example input"
                                 aria-describedby="inputGroup-sizing-sm" placeholder="Enter City" id="textCityName">
                             </input>
-                            <button class="btn btn-primary" type="submit" id="btnSubmit"><i
+                            <button class="btn btn-outline-primary" type="submit" id="btnSubmit"><i
                                     class="fas fa-search"></i></button>
-                            <button class="btn btn-danger" type="submit" id="deleteSubmit">Reset</button>
+                            <button class="btn btn-outline-danger" type="submit" id="deleteSubmit">Reset</button>
                         </div>
                     </form>
                     <div>
@@ -79,7 +79,7 @@
                     <div class="card">
                         <div class="card-body box" id="presentWeather"></div>
                     </div>
-                    <h4 class="display-5">5-Days Forecast : </h4>
+                    <h4 class="display-5 font-weight-bold text-success">5-Days Forecast : </h4>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2 justify-content-between"
                         id="append">
                     </div>
