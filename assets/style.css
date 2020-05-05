@@ -9,7 +9,11 @@ body{
     height: 150px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+.list-group-item:hover{
 
+    color: lightblue;
+    cursor: pointer;
+}
 .list-group{
 
     margin-top: 25px;
