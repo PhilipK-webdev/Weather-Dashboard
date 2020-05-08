@@ -17,6 +17,8 @@ $(document).ready(function () {
             event.preventDefault();
             inputUser = $("#textCityName").val();
             isValidInput(inputUser, arrValueInput);
+            inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
+            $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
             $("#textCityName").val("");
             $("#presentWeather").html("");
             $("#append").html("");
@@ -24,7 +26,7 @@ $(document).ready(function () {
         });
     }
 
-    // makes every li click on - display info regarding the city with the name of the li.
+    // makes every li click on - display info regarding the city with the same name like li.
     $(document).on("click", ".list-group-item", function () {
         var lastCity;
         $("#presentWeather").html("");
@@ -94,7 +96,7 @@ $(document).ready(function () {
         }).then(function (res) {
 
             inputUser = res.city.name;
-            $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
+
             latitude = res.city.coord.lat.toString();
             longitude = res.city.coord.lon.toString();
             arrWeather = [];
@@ -132,8 +134,9 @@ $(document).ready(function () {
                 window.localStorage.setItem("city", JSON.stringify(arrWeather));
             });
 
+            //cathe the error response that is coming back from GET request
         }).catch(function (res) {
-            console.log(res);
+
             $("#presentWeather").text(res.responseJSON.message + " " + res.responseJSON.cod);
             $(".display-5").html("");
         });
