@@ -1,6 +1,6 @@
 # Introduction: Home Assignment Weather Dashboard
 
-Our home assignment Weather Dashboard is all about to build a web page using API with GET request from,openweathermap.
+Our home assignment Weather Dashboard is all about to build a web page using API with GET request from openweathermap.
 Weather Dashboard - shows specific data regarding the cities, including 5 day forecast.
 
 
