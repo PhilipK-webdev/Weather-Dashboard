@@ -81,6 +81,7 @@ $(document).ready(function () {
         } else {
 
             $("#myModalCity").modal();
+            $(".display-5").hide();
 
         }
     }
