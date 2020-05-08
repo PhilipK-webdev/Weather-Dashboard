@@ -17,8 +17,7 @@ $(document).ready(function () {
             event.preventDefault();
             inputUser = $("#textCityName").val();
             isValidInput(inputUser, arrValueInput);
-            inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
-            $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
+
             $("#textCityName").val("");
             $("#presentWeather").html("");
             $("#append").html("");
@@ -74,6 +73,8 @@ $(document).ready(function () {
             } else {
                 arrValueInput.push(inputUser.toLocaleLowerCase());
                 $(".display-5").show();
+                inputUser = inputUser.substr(0, 1).toUpperCase() + inputUser.substr(1);
+                $(".list-group").prepend(` <li class="list-group-item text-primary">${inputUser}</li>`);
                 renderCity(inputUser, apiKey, arrWeather);
             }
 
